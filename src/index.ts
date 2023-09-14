@@ -1,2 +1,5 @@
-export const one = 1;
-export const two = 2;
+import { tokenize } from "./debug";
+
+export function compile(lyric: string) {
+  return tokenize(lyric);
+}
