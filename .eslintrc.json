@@ -1,6 +1,6 @@
 {
   "extends": "@bernankez",
   "ignorePatterns": [
-    "fixtures"
+    "*.lrc"
   ]
 }
