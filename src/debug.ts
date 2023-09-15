@@ -1,5 +1,5 @@
 export interface Token {
-  type: "paren" | "colon" | "dot" | "number" | "string" | "break";
+  type: "square" | "colon" | "dot" | "number" | "string" | "break";
   value: string;
 }
 
@@ -17,7 +17,7 @@ export function tokenize(lyric: string) {
 
     if (char === "[" || char === "]") {
       tokens.push({
-        type: "paren",
+        type: "square",
         value: char,
       });
       current++;

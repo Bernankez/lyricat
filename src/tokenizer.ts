@@ -1,11 +1,13 @@
 export interface Token {
-  type: "paren" | "angle" | "label" | "string" | "break";
+  type: "Tag" | "Time" | "InlineTime" | "Role" | "Lyric" | "Break";
   value: string;
 }
 
 const WHITE_SPACE = /\s/;
 const BREAK_LINE = /\n/;
-const LABEL = /[FMD]/;
+const TAG = /^(?!\d{2}:\d{2}\.\d{0,2}$)\w+:.*$/;
+const TIME = /^\d{2}:\d{2}\.\d{0,2}$/;
+const LABEL = /[FMD]:/;
 
 export function tokenize(lyric: string) {
   const tokens: Token[] = [];
@@ -13,54 +15,90 @@ export function tokenize(lyric: string) {
   const length = lyric.length;
 
   while (current < length) {
-    const char = lyric[current];
+    let char = lyric[current];
 
-    if (char === "[" || char === "]") {
-      tokens.push({
-        type: "paren",
-        value: char,
-      });
-      current++;
-      continue;
-    }
-
-    if (char === "<" || char === ">") {
-      tokens.push({
-        type: "angle",
-        value: char,
-      });
-      current++;
-      continue;
-    }
-
-    if (LABEL.test(char) && lyric[current + 1] === ":") {
-      tokens.push({
-        type: "label",
-        value: `${char}:`,
-      });
-      current += 2;
-      continue;
-    }
-
+    // Break
     if (BREAK_LINE.test(char)) {
       tokens.push({
-        type: "break",
+        type: "Break",
         value: char,
       });
       current++;
       continue;
     }
 
+    // Whitespace
     if (WHITE_SPACE.test(char)) {
       current++;
       continue;
     }
 
-    if (tokens.at(-1)?.type === "string") {
+    // Tag or Time
+    if (char === "[") {
+      let value = "";
+      char = lyric[++current];
+      while (char !== "]") {
+        value += char;
+        char = lyric[++current];
+      }
+      if (TIME.test(value)) {
+        tokens.push({
+          type: "Time",
+          value,
+        });
+        current++;
+        continue;
+      } else if (TAG.test(value)) {
+        tokens.push({
+          type: "Tag",
+          value,
+        });
+        current++;
+        continue;
+      }
+      throw new TypeError(`[Lyricat] Unknown type: ${value}`);
+    }
+
+    // InlineTime
+    if (char === "<") {
+      let value = "";
+      char = lyric[++current];
+      while (char !== ">") {
+        value += char;
+        char = lyric[++current];
+      }
+      if (TIME.test(value)) {
+        tokens.push({
+          type: "InlineTime",
+          value,
+        });
+        current++;
+        continue;
+      }
+      throw new Error(`[Lyricat] Unknown type: ${value}`);
+    }
+
+    // Role
+    if (tokens.at(-1)?.type === "Time") {
+      const value = char + lyric[++current];
+      if (LABEL.test(value)) {
+        tokens.push({
+          type: "Role",
+          value: value[0],
+        });
+        current++;
+        continue;
+      }
+      // Recover
+      current--;
+    }
+
+    // Lyric
+    if (tokens.at(-1)?.type === "Lyric") {
       tokens.at(-1)!.value += char;
     } else {
       tokens.push({
-        type: "string",
+        type: "Lyric",
         value: char,
       });
     }
