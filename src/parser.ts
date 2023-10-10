@@ -36,51 +36,6 @@ export interface PLyric {
   value: string;
 }
 
-const example = {
-  type: "Program",
-  body: [
-    {
-      type: "Tag",
-      value: "ar:333",
-    },
-    {
-      type: "Time",
-      stamp: ["00:22.33", "09:22.33"],
-      value: {
-        type: "Role",
-        name: "F",
-        value: [
-          {
-            type: "InlineTime",
-            stamp: "00:23.33",
-            value: {
-              type: "Lyric",
-              value: "我",
-            },
-          },
-          {
-            type: "InlineTime",
-            stamp: "00:24.33",
-            value: {
-              type: "Lyric",
-              value: "的 世界",
-            },
-          },
-        ],
-      },
-    },
-    {
-      type: "Time",
-      stamp: ["00:22.33"],
-      value: {
-        type: "Lyric",
-        value: "变得奇妙更难以言喻",
-      },
-    },
-
-  ],
-};
-
 export function parse(tokens: Token[]) {
   const ast: ParserAST = {
     type: "Program",
