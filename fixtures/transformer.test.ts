@@ -15,6 +15,80 @@ const lrc = `[ti:说爱你]
 
 describe("transformer", () => {
   it("transform", () => {
-    expect(transform(parse(tokenize(lrc)))).toMatchInlineSnapshot();
+    expect(transform(parse(tokenize(lrc)))).toMatchInlineSnapshot(`
+      {
+        "lyrics": [
+          {
+            "lyric": "我的世界变得奇妙更难以言喻",
+            "stamp": "02:51.48",
+          },
+          {
+            "inline": [
+              {
+                "lyric": "我",
+                "stamp": "02:52.50",
+              },
+              {
+                "lyric": "的",
+                "stamp": "02:54.10",
+              },
+            ],
+            "stamp": "02:51.48",
+          },
+          {
+            "lyric": "直到确定手的温度来自你心里",
+            "role": "M",
+            "stamp": "03:00.85",
+          },
+          {
+            "lyric": "直到确定手的温度来自你心里",
+            "role": "M",
+            "stamp": "00:30.24",
+          },
+          {
+            "inline": [
+              {
+                "lyric": "这",
+                "stamp": "02:52.50",
+              },
+              {
+                "lyric": "一刻我终于勇敢说爱你",
+                "stamp": "02:54.10",
+              },
+            ],
+            "role": "D",
+            "stamp": "03:05.60",
+          },
+          {
+            "inline": [
+              {
+                "lyric": "这",
+                "stamp": "02:52.50",
+              },
+              {
+                "lyric": "一刻我终于勇敢说爱你",
+                "stamp": "02:54.10",
+              },
+            ],
+            "role": "D",
+            "stamp": "00:34.94",
+          },
+        ],
+        "tags": [
+          {
+            "title": "ti",
+            "value": "说爱你",
+          },
+          {
+            "title": "by",
+            "value": "",
+          },
+          {
+            "title": "offset",
+            "value": "500",
+          },
+        ],
+      }
+    `);
   });
 });
